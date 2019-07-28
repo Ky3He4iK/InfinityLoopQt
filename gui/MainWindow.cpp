@@ -6,8 +6,6 @@
 
 #include <QVBoxLayout>
 
-#include <iostream>
-
 MainWindow::MainWindow(QWidget *parent) {
     QVBoxLayout windowLayout;
 
@@ -16,10 +14,9 @@ MainWindow::MainWindow(QWidget *parent) {
     fieldLayout = new FieldWidget(Q_NULLPTR, field);
     controlsWidget = new ControlsWidget(Q_NULLPTR, w, h);
 
-    std::cout << "adding fieldLayout\n";
     windowLayout.addWidget(fieldLayout);
-    std::cout << "adding controlsWidget\n";
     windowLayout.addWidget(controlsWidget);
-    std::cout << "applying\n";
     setLayout(&windowLayout);
+
+    connect(controlsWidget, &ControlsWidget::resizeSignal, field, &Field::restartSlot);
 }

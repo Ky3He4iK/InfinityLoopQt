@@ -32,6 +32,7 @@ public:
     explicit ControlsWidget(QWidget *parent = Q_NULLPTR, size_t _width = 4, size_t _height = 4);
 
 signals:
+
     void resizeSignal(size_t width, size_t height);
 
 private slots:
