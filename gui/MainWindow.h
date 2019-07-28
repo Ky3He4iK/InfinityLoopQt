@@ -7,7 +7,7 @@
 
 #include <QMainWindow>
 
-#include "FieldLayout.h"
+#include "FieldWidget.h"
 #include "ControlsWidget.h"
 #include "../Field.h"
 
@@ -15,7 +15,7 @@ class MainWindow : public QWidget {
 Q_OBJECT
 
 private:
-    FieldLayout *fieldLayout;
+    FieldWidget *fieldLayout;
     ControlsWidget *controlsWidget;
     Field *field;
 

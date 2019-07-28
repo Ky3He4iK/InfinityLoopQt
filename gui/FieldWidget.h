@@ -2,23 +2,24 @@
 // Created by ky3he4ik on 7/20/19.
 //
 
-#ifndef GAME_FIELDLAYOUT_H
-#define GAME_FIELDLAYOUT_H
+#ifndef GAME_FIELDWIDGET_H
+#define GAME_FIELDWIDGET_H
 
 #include <QWidget>
 #include <QGridLayout>
 #include <vector>
 #include "FieldCellWidget.h"
 
-class FieldLayout : public QGridLayout {
+class FieldWidget : public QWidget {
 Q_OBJECT
 
 public:
-    explicit FieldLayout(QWidget *parent = Q_NULLPTR, Field *_field = nullptr);
+    explicit FieldWidget(QWidget *parent = Q_NULLPTR, Field *_field = nullptr);
 
 private:
     Field *field;
     std::vector<FieldCellWidget *> fieldCells;
+    QGridLayout *layout;
 
     void clear();
 
@@ -37,4 +38,4 @@ signals:
 };
 
 
-#endif //GAME_FIELDLAYOUT_H
+#endif //GAME_FIELDWIDGET_H

@@ -13,11 +13,11 @@ MainWindow::MainWindow(QWidget *parent) {
 
     size_t w = 5, h = 6;
     field = new Field(w, h);
-    fieldLayout = new FieldLayout(Q_NULLPTR, field);
+    fieldLayout = new FieldWidget(Q_NULLPTR, field);
     controlsWidget = new ControlsWidget(Q_NULLPTR, w, h);
 
     std::cout << "adding fieldLayout\n";
-    windowLayout.addLayout(fieldLayout);
+    windowLayout.addWidget(fieldLayout);
     std::cout << "adding controlsWidget\n";
     windowLayout.addWidget(controlsWidget);
     std::cout << "applying\n";
