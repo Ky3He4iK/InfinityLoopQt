@@ -4,7 +4,7 @@
 
 #include "FieldCellWidget.h"
 
-FieldCellWidget::FieldCellWidget(QWidget *parent, FieldCellData *_fieldCellData) {
+FieldCellWidget::FieldCellWidget(QWidget *parent, FieldCellData *_fieldCellData) : fieldCellData(_fieldCellData) {
     fieldCellData = _fieldCellData;
     setIcon(fieldCellData->icon);
     setIconSize(QSize(50, 50));
@@ -13,8 +13,17 @@ FieldCellWidget::FieldCellWidget(QWidget *parent, FieldCellData *_fieldCellData)
     show();
     connect(this, &FieldCellWidget::clicked, this, &FieldCellWidget::clickedSlot);
     connect(this, &FieldCellWidget::rotateSignal, fieldCellData->field, &Field::rotateSlot);
+}
 
-    //todo
+FieldCellWidget::FieldCellWidget(QWidget *parent, Field *_field, size_t _x, size_t _y) : fieldCellData(
+        new FieldCellData{_field, _x, _y}) {
+    setIcon(fieldCellData->icon);
+    setIconSize(QSize(50, 50));
+
+    setFlat(true);
+    show();
+    connect(this, &FieldCellWidget::clicked, this, &FieldCellWidget::clickedSlot);
+    connect(this, &FieldCellWidget::rotateSignal, fieldCellData->field, &Field::rotateSlot);
 }
 
 void FieldCellWidget::redraw() {
@@ -27,7 +36,7 @@ void FieldCellWidget::redrawSlot() {
 }
 
 //void FieldCellWidget::onClick() {
-    //todo
+//todo
 //    emit rotateSignal(x, y);
 //}
 

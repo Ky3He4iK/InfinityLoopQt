@@ -34,8 +34,9 @@ void FieldWidget::start() {
     fieldCells.reserve(field->getHeigth() * field->getWidth());
     for (size_t x = 0; x < field->getHeigth(); x++) {
         for (size_t y = 0; y < field->getWidth(); y++) {
-            fieldCells.push_back(new FieldCellWidget(Q_NULLPTR, new FieldCellData(field, x, y)));
-            connect(this, &FieldWidget::redrawSignal, fieldCells[x * layout->columnCount() + y], &FieldCellWidget::redrawSlot);
+            fieldCells.push_back(new FieldCellWidget{Q_NULLPTR, field, x, y});
+            connect(this, &FieldWidget::redrawSignal, fieldCells[x * layout->columnCount() + y],
+                    &FieldCellWidget::redrawSlot);
             layout->addWidget(fieldCells[x * layout->columnCount() + y], x, y);
         }
     }
@@ -83,14 +84,14 @@ void FieldWidget::rearrange() {
             fieldCells[(old_size / new_w) * new_w + y]->relocate(old_size / new_w, y);
         }
         for (size_t y = old_size % new_w; y < new_w; y++) {
-            fieldCells.push_back(new FieldCellWidget(Q_NULLPTR, new FieldCellData(field, old_size / new_w, y)));
+            fieldCells.push_back(new FieldCellWidget{Q_NULLPTR, field, old_size / new_w, y});
             connect(this, &FieldWidget::redrawSignal, fieldCells[old_size / new_w * new_w + y],
                     &FieldCellWidget::redrawSlot);
             layout->addWidget(fieldCells[old_size / new_w * new_w + y], old_size / new_w, y);
         }
         for (size_t x = old_size / new_w + ((old_size % new_w) ? 1 : 0); x < new_h; x++) {
             for (size_t y = 0; y < new_w; y++) {
-                fieldCells.push_back(new FieldCellWidget(Q_NULLPTR, new FieldCellData(field, x, y)));
+                fieldCells.push_back(new FieldCellWidget{Q_NULLPTR, field, x, y});
                 connect(this, &FieldWidget::redrawSignal, fieldCells[x * new_w + y], &FieldCellWidget::redrawSlot);
                 layout->addWidget(fieldCells[x * new_w + y], x, y);
             }
