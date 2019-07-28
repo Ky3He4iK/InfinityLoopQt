@@ -5,7 +5,7 @@
 #include "ControlsWidget.h"
 
 ControlsWidget::ControlsWidget(QWidget *parent, size_t _width, size_t _height) : width(_width), height(_height) {
-    //todo
+    //todo: icon to applyButton
 
     QHBoxLayout *allContent;
 
