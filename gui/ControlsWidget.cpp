@@ -4,10 +4,6 @@
 
 #include "ControlsWidget.h"
 
-
-#include <QGridLayout>
-
-
 ControlsWidget::ControlsWidget(QWidget *parent, size_t _width, size_t _height) : width(_width), height(_height) {
     //todo
 
@@ -17,24 +13,22 @@ ControlsWidget::ControlsWidget(QWidget *parent, size_t _width, size_t _height) :
     allContent = new QHBoxLayout;
 
     controlWidth = new QVBoxLayout;
-    textWidth = new QPlainTextEdit;
-    textWidth->setReadOnly(true);
-    textWidth->setPlainText("Width:");
+    labelWidth = new QLabel;
+    labelWidth->setText("Width:");
     spinBoxWidth = new QSpinBox;
     spinBoxWidth->setRange(3, 20);
     spinBoxWidth->setValue(width);
-    controlWidth->addWidget(textWidth);
+    controlWidth->addWidget(labelWidth);
     controlWidth->addWidget(spinBoxWidth);
     allContent->addLayout(controlWidth);
 
     controlHeight = new QVBoxLayout;
-    textHeight = new QPlainTextEdit;
-    textHeight->setReadOnly(true);
-    textHeight->setPlainText("Height:");
+    labelHeight = new QLabel;
+    labelHeight->setText("Height:");
     spinBoxHeight = new QSpinBox;
     spinBoxHeight->setRange(3, 20);
     spinBoxHeight->setValue(height);
-    controlHeight->addWidget(textHeight);
+    controlHeight->addWidget(labelHeight);
     controlHeight->addWidget(spinBoxHeight);
     allContent->addLayout(controlHeight);
 

@@ -8,6 +8,7 @@
 #include <QWidget>
 #include <QSpinBox>
 #include <QPlainTextEdit>
+#include <QLabel>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -17,9 +18,9 @@ Q_OBJECT
 
 private:
     size_t width, height;
-    QPlainTextEdit *textWidth;
+    QLabel *labelWidth;
     QSpinBox *spinBoxWidth;
-    QPlainTextEdit *textHeight;
+    QLabel *labelHeight;
     QSpinBox *spinBoxHeight;
     QPushButton *applyButton;
 
