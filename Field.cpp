@@ -33,7 +33,7 @@ void Field::rotate(const size_t x, const size_t y) {
         newrot = 0;
     field[x][y] = (uint8_t) (field[x][y] & TYPE_MASK) | newrot;
     if (check(x, y) && check())
-        restart(width + 1, height + 1);
+        restart(width, height);
 
     emit dataChangedSignal();
 }
