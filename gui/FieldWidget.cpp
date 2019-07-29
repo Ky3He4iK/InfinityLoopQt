@@ -3,47 +3,70 @@
 //
 
 #include "FieldWidget.h"
-#include "util/GridLayoutUtil.h"
+#include <algorithm>
 
 FieldWidget::FieldWidget(QWidget *parent, Field *_field) : field(_field) {
 //    setHorizontalSpacing(0);
 //    setVerticalSpacing(0);
     if (field == nullptr)
         return;
-    layout = new QGridLayout;
+    holder = new QVBoxLayout;
     start();
-    setLayout(layout);
+    setLayout(holder);
 
     connect(field, &Field::dataChangedSignal, this, &FieldWidget::dataChangedSlot);
 }
 
 void FieldWidget::clear() {
-    for (size_t x = 0; x < layout->rowCount(); x++) {
+    for (size_t x = 0; x < cellsGrid.size(); x++)
+        clearRow(x);
 
-        for (size_t y = 0; y < layout->columnCount(); y++) {
-            delete fieldCells[x * layout->columnCount() + y];
-        }
+    cellsGrid.clear();
+    rows.clear();
+}
+
+void FieldWidget::clearRow(size_t x) {
+    for (size_t y = 0; y < cellsGrid[x].size(); y++) {
+        clearCell(x, y);
     }
-    fieldCells.clear();
-    GridLayoutUtil::removeAll(layout);
+    cellsGrid[x].clear();
+    holder->removeItem(holder->itemAt(x));
+}
+
+void FieldWidget::clearCell(size_t x, size_t y) {
+    cellsGrid[x][y]->hide();
+    disconnect(this, &FieldWidget::redrawSignal, cellsGrid[x][y],
+               &FieldCellWidget::redrawSlot);
+    rows[x]->removeItem(rows[x]->itemAt(y));
+    delete cellsGrid[x][y];
 }
 
 void FieldWidget::start() {
-    layout->setHorizontalSpacing(0);
-    layout->setVerticalSpacing(0);
-    fieldCells.reserve(field->getHeigth() * field->getWidth());
-    for (size_t x = 0; x < field->getHeigth(); x++) {
-        for (size_t y = 0; y < field->getWidth(); y++) {
-            fieldCells.push_back(new FieldCellWidget{Q_NULLPTR, field, x, y});
-            connect(this, &FieldWidget::redrawSignal, fieldCells[x * layout->columnCount() + y],
-                    &FieldCellWidget::redrawSlot);
-            layout->addWidget(fieldCells[x * layout->columnCount() + y], x, y);
-        }
-    }
+    holder->setSpacing(0);
+    cellsGrid.resize(field->getHeigth());
+    rows.resize(field->getHeigth());
+    for (size_t x = 0; x < field->getHeigth(); x++)
+        addRow(x);
+}
+
+void FieldWidget::addRow(size_t x) {
+    rows[x] = new QHBoxLayout;
+    rows[x]->setSpacing(0);
+    cellsGrid[x].resize(field->getWidth());
+    holder->addLayout(rows[x]);
+    for (size_t y = 0; y < field->getWidth(); y++)
+        addCell(x, y);
+}
+
+void FieldWidget::addCell(size_t x, size_t y) {
+    cellsGrid[x][y] = new FieldCellWidget{Q_NULLPTR, field, x, y};
+    connect(this, &FieldWidget::redrawSignal, cellsGrid[x][y],
+            &FieldCellWidget::redrawSlot);
+    rows[x]->addWidget(cellsGrid[x][y]);
 }
 
 void FieldWidget::dataChangedSlot() {
-    if (layout->columnCount() != field->getWidth() || layout->rowCount() != field->getHeigth()) {
+    if (cellsGrid[0].size() != field->getWidth() || cellsGrid.size() != field->getHeigth()) {
         clear();
         start();
 //        rearrange();
@@ -52,52 +75,28 @@ void FieldWidget::dataChangedSlot() {
 }
 
 void FieldWidget::rearrange() {
-    size_t old_size = fieldCells.size(), new_size = field->getWidth() * field->getHeigth(),
-            old_w = layout->columnCount(), old_h = layout->rowCount(), new_w = field->getWidth(), new_h = field->getHeigth();
-    if (old_size >= new_size) {
-        for (size_t x = 0; x < new_h; x++) {
-            for (size_t y = 0; y < new_w; y++) {
-                GridLayoutUtil::removeCell(layout, fieldCells[x * layout->columnCount() + y]->getX(),
-                                           fieldCells[x * layout->columnCount() + y]->getY());
-                fieldCells[x * layout->columnCount() + y]->relocate(x, y);
-                layout->addWidget(fieldCells[x * layout->columnCount() + y], x, y);
-            }
+    size_t old_w = cellsGrid[0].size(), old_h = cellsGrid.size(), new_w = field->getWidth(), new_h = field->getHeigth();
+    for (size_t x = 0; x < std::min(old_h, new_h); x++) {
+        if (old_w >= new_w) {
+            for (size_t y = new_w; y < old_w; y++)
+                clearCell(x, y);
+            cellsGrid[x].resize(new_w);
+        } else {
+            cellsGrid[x].resize(new_w);
+            for (size_t y = old_w; y < new_w; y++)
+                addCell(x, y);
         }
-        for (size_t i = new_size; i < old_size; i++)
-            delete fieldCells[i];
-
-    } else {
-        for (size_t x = 0; x < old_size / new_w; x++) {
-            for (size_t y = 0; y < new_w; y++) {
-                layout->addWidget(fieldCells[x * new_w + y], x, y);
-                GridLayoutUtil::removeCell(layout, fieldCells[x * new_w + y]->getX(),
-                                           fieldCells[x * new_w + y]->getY());
-                if (fieldCells[x * new_w + y]) {
-                    fieldCells[x * new_w + y]->relocate(x, y);
-                }
-            }
-        }
-        for (size_t y = 0; y < old_size % new_w; y++) {
-            GridLayoutUtil::removeCell(layout, fieldCells[(old_size / new_w) * new_w + y]->getX(),
-                                       fieldCells[(old_size / new_w) * new_w + y]->getY());
-            layout->addWidget(fieldCells[old_size / new_w * new_w + y], old_size / new_w, y);
-            fieldCells[(old_size / new_w) * new_w + y]->relocate(old_size / new_w, y);
-        }
-        for (size_t y = old_size % new_w; y < new_w; y++) {
-            fieldCells.push_back(new FieldCellWidget{Q_NULLPTR, field, old_size / new_w, y});
-            connect(this, &FieldWidget::redrawSignal, fieldCells[old_size / new_w * new_w + y],
-                    &FieldCellWidget::redrawSlot);
-            layout->addWidget(fieldCells[old_size / new_w * new_w + y], old_size / new_w, y);
-        }
-        for (size_t x = old_size / new_w + ((old_size % new_w) ? 1 : 0); x < new_h; x++) {
-            for (size_t y = 0; y < new_w; y++) {
-                fieldCells.push_back(new FieldCellWidget{Q_NULLPTR, field, x, y});
-                connect(this, &FieldWidget::redrawSignal, fieldCells[x * new_w + y], &FieldCellWidget::redrawSlot);
-                layout->addWidget(fieldCells[x * new_w + y], x, y);
-            }
-
-        }
-        //todo
     }
-//    todo
+    if (old_h >= new_h) {
+        for (size_t x = new_h; x < old_h; x++)
+            clearRow(x);
+
+        cellsGrid.resize(new_h);
+        rows.resize(new_h);
+    } else {
+        cellsGrid.resize(new_h);
+        rows.resize(new_h);
+        for (size_t x = old_h; x < new_h; x++)
+            addRow(x);
+    }
 }

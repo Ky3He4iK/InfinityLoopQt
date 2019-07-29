@@ -7,7 +7,9 @@
 
 #include <QWidget>
 #include <QGridLayout>
-#include <vector>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QVector>
 #include "FieldCellWidget.h"
 
 class FieldWidget : public QWidget {
@@ -18,10 +20,20 @@ public:
 
 private:
     Field *field;
-    std::vector<FieldCellWidget *> fieldCells;
-    QGridLayout *layout;
+
+    QVector<QVector<FieldCellWidget*> > cellsGrid;
+    QVector<QHBoxLayout*> rows;
+    QVBoxLayout *holder;
 
     void clear();
+
+    void clearRow(size_t x);
+
+    void clearCell(size_t x, size_t y);
+
+    void addRow(size_t x);
+
+    void addCell(size_t x, size_t y);
 
     void start();
 

@@ -14,11 +14,13 @@ Q_OBJECT
 
 public:
     explicit FieldCellWidget(QWidget *parent = Q_NULLPTR, FieldCellData *_fieldCellData = nullptr);
-    explicit FieldCellWidget(QWidget *parent = Q_NULLPTR, Field *_field = nullptr, size_t _x = 0, size_t _y = 0);
+
+    explicit FieldCellWidget(QWidget *parent, Field *_field, size_t _x, size_t _y);
 
     void relocate(size_t x, size_t y);
 
     size_t getX() { return fieldCellData->x; }
+
     size_t getY() { return fieldCellData->y; }
 
 private:

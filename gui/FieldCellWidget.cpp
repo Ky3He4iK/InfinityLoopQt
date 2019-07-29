@@ -5,6 +5,8 @@
 #include "FieldCellWidget.h"
 
 FieldCellWidget::FieldCellWidget(QWidget *parent, FieldCellData *_fieldCellData) : fieldCellData(_fieldCellData) {
+    if (!fieldCellData)
+        return;
     fieldCellData = _fieldCellData;
     setIcon(fieldCellData->icon);
     setIconSize(QSize(50, 50));
@@ -27,6 +29,8 @@ FieldCellWidget::FieldCellWidget(QWidget *parent, Field *_field, size_t _x, size
 }
 
 void FieldCellWidget::redraw() {
+    if (!fieldCellData)
+        return;
     fieldCellData->setIcon();
     setIcon(fieldCellData->icon);
 }
@@ -41,6 +45,8 @@ void FieldCellWidget::redrawSlot() {
 //}
 
 void FieldCellWidget::clickedSlot() {
+    if (!fieldCellData)
+        return;
     fieldCellData->rotate();
     setIcon(fieldCellData->icon);
     emit rotateSignal(fieldCellData->x, fieldCellData->y);
@@ -52,6 +58,8 @@ void FieldCellWidget::clickedSlot() {
 //}
 
 void FieldCellWidget::relocate(size_t x, size_t y) {
+    if (!fieldCellData)
+        return;
     fieldCellData->x = x;
     fieldCellData->y = y;
     redraw();
