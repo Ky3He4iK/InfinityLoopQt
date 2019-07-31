@@ -7,14 +7,6 @@
 #include <unistd.h>
 #include <iostream>
 
-
-#define UINT_1 (uint8_t) 1
-#define UINT_2 (uint8_t) 2
-#define UINT_3 (uint8_t) 3
-#define UINT_4 (uint8_t) 4
-#define UINT_5 (uint8_t) 5
-#define UINT_8 (uint8_t) 8
-
 Field::Field(const size_t _width, const size_t _height) : width(_width), height(_height) {
     srand(time(nullptr) * getpid());
     create(_width, _height);

@@ -30,7 +30,7 @@ private:
 public:
     static IconManager &getInstance();
 
-    QIcon getIcon(size_t x, size_t y);
+    QIcon getIcon(size_t type, size_t rotation);
 
     IconManager(IconManager const &) = delete;
 

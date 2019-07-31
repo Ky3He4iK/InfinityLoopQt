@@ -4,63 +4,33 @@
 
 #include "FieldCellWidget.h"
 
-FieldCellWidget::FieldCellWidget(QWidget *parent, FieldCellData *_fieldCellData) : fieldCellData(_fieldCellData) {
-    if (!fieldCellData)
-        return;
-    fieldCellData = _fieldCellData;
-    setIcon(fieldCellData->icon);
-    setIconSize(QSize(50, 50));
+FieldCellWidget::FieldCellWidget(QWidget *parent, Field *_field, size_t _x, size_t _y)
+        : iconManager(IconManager::getInstance()), field(_field), x(_x), y(_y) {
 
+    draw();
     setFlat(true);
     show();
     connect(this, &FieldCellWidget::clicked, this, &FieldCellWidget::clickedSlot);
-    connect(this, &FieldCellWidget::rotateSignal, fieldCellData->field, &Field::rotateSlot);
+    connect(this, &FieldCellWidget::rotateSignal, field, &Field::rotateSlot);
 }
 
-FieldCellWidget::FieldCellWidget(QWidget *parent, Field *_field, size_t _x, size_t _y) : fieldCellData(
-        new FieldCellData{_field, _x, _y}) {
-    setIcon(fieldCellData->icon);
+
+void FieldCellWidget::draw() {
+    setIcon(iconManager.getIcon(field->gettype(x, y), field->getrotate(x, y)));
     setIconSize(QSize(50, 50));
-
-    setFlat(true);
-    show();
-    connect(this, &FieldCellWidget::clicked, this, &FieldCellWidget::clickedSlot);
-    connect(this, &FieldCellWidget::rotateSignal, fieldCellData->field, &Field::rotateSlot);
-}
-
-void FieldCellWidget::redraw() {
-    if (!fieldCellData)
-        return;
-    fieldCellData->setIcon();
-    setIcon(fieldCellData->icon);
 }
 
 void FieldCellWidget::redrawSlot() {
-    redraw();
+    draw();
 }
-
-//void FieldCellWidget::onClick() {
-//todo
-//    emit rotateSignal(x, y);
-//}
 
 void FieldCellWidget::clickedSlot() {
-    if (!fieldCellData)
-        return;
-    fieldCellData->rotate();
-    setIcon(fieldCellData->icon);
-    emit rotateSignal(fieldCellData->x, fieldCellData->y);
-//    show();
+    draw();
+    emit rotateSignal(x, y);
 }
 
-//void FieldCellWidget::dataChangedSlot(Field *field) {
-//    rotate = field->getrotate(x, y);
-//}
-
-void FieldCellWidget::relocate(size_t x, size_t y) {
-    if (!fieldCellData)
-        return;
-    fieldCellData->x = x;
-    fieldCellData->y = y;
-    redraw();
+void FieldCellWidget::relocate(size_t _x, size_t _y) {
+    x = _x;
+    y = _y;
+    draw();
 }

@@ -18,6 +18,13 @@
 #define ROTATE_COUNT 4
 #define TYPE_COUNT 6
 
+#define UINT_1 (uint8_t) 1
+#define UINT_2 (uint8_t) 2
+#define UINT_3 (uint8_t) 3
+#define UINT_4 (uint8_t) 4
+#define UINT_5 (uint8_t) 5
+#define UINT_8 (uint8_t) 8
+
 class Field : public QObject {
 Q_OBJECT
 private:

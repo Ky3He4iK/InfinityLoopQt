@@ -8,25 +8,27 @@
 #include <QPushButton>
 #include "../Field.h"
 #include "FieldCellData.h"
+#include "util/IconManager.h"
 
 class FieldCellWidget : public QPushButton {
 Q_OBJECT
 
 public:
-    explicit FieldCellWidget(QWidget *parent = Q_NULLPTR, FieldCellData *_fieldCellData = nullptr);
-
     explicit FieldCellWidget(QWidget *parent, Field *_field, size_t _x, size_t _y);
 
     void relocate(size_t x, size_t y);
 
-    size_t getX() { return fieldCellData->x; }
+    size_t getX() { return x; }
 
-    size_t getY() { return fieldCellData->y; }
+    size_t getY() { return y; }
 
 private:
-    FieldCellData *fieldCellData;
+    IconManager &iconManager;
+    Field *field;
+    size_t x, y;
 
-    void redraw();
+    void draw();
+
 
 
 public slots:
