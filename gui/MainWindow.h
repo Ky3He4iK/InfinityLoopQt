@@ -15,7 +15,7 @@ class MainWindow : public QWidget {
 Q_OBJECT
 
 private:
-    FieldWidget *fieldLayout;
+    FieldWidget *fieldWidget;
     ControlsWidget *controlsWidget;
     Field *field;
 

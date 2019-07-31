@@ -16,7 +16,7 @@ ControlsWidget::ControlsWidget(QWidget *parent, size_t _width, size_t _height) :
     labelWidth = new QLabel;
     labelWidth->setText("Width:");
     spinBoxWidth = new QSpinBox;
-    spinBoxWidth->setRange(3, 20);
+    spinBoxWidth->setRange(2, 38);
     spinBoxWidth->setValue(width);
     controlWidth->addWidget(labelWidth);
     controlWidth->addWidget(spinBoxWidth);
@@ -26,7 +26,7 @@ ControlsWidget::ControlsWidget(QWidget *parent, size_t _width, size_t _height) :
     labelHeight = new QLabel;
     labelHeight->setText("Height:");
     spinBoxHeight = new QSpinBox;
-    spinBoxHeight->setRange(3, 20);
+    spinBoxHeight->setRange(2, 20);
     spinBoxHeight->setValue(height);
     controlHeight->addWidget(labelHeight);
     controlHeight->addWidget(spinBoxHeight);

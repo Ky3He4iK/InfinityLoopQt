@@ -5,9 +5,16 @@
 #include "FieldWidget.h"
 #include <algorithm>
 
-FieldWidget::FieldWidget(QWidget *parent, Field *_field) : field(_field) {
+FieldWidget::FieldWidget(QWidget *, Field *_field) : field(_field) {
 //    setHorizontalSpacing(0);
 //    setVerticalSpacing(0);
+
+    // set black background
+    QPalette pal = palette();
+    pal.setColor(QPalette::Background, Qt::black);
+    setAutoFillBackground(true);
+    setPalette(pal);
+
     if (field == nullptr)
         return;
     holder = new QVBoxLayout;
@@ -67,10 +74,13 @@ void FieldWidget::addCell(size_t x, size_t y) {
 
 void FieldWidget::dataChangedSlot() {
     if (cellsGrid[0].size() != field->getWidth() || cellsGrid.size() != field->getHeigth()) {
-        clear();
-        start();
-//        rearrange();
+//        clear();
+//        start();
+        rearrange();
+        resize(cellsGrid[0][0]->size().width() * field->getWidth(), cellsGrid[0][0]->size().height() * field->getHeigth());
+        adjustSize();
     }
+
     emit redrawSignal();
 }
 
