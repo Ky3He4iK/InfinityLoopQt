@@ -7,7 +7,6 @@
 
 #include <QPushButton>
 #include "../Field.h"
-#include "FieldCellData.h"
 #include "util/IconManager.h"
 
 class FieldCellWidget : public QPushButton {
@@ -29,17 +28,12 @@ private:
 
     void draw();
 
-
-
 public slots:
-
     void clickedSlot();
 
     void redrawSlot();
-//    void dataChangedSlot(Field *);
 
 signals:
-
     void rotateSignal(size_t, size_t);
 
 };

@@ -8,15 +8,12 @@ IconManager::IconManager() {
     data.resize(TYPE_COUNT);
     for (size_t i = 0; i < TYPE_COUNT; i++) {
         data[i].resize(ROTATE_COUNT);
-        QIcon base(iconNames[i]);
-        QPixmap pixmap(base.pixmap(base.availableSizes().last()));
-        QMatrix rm;
+        QPixmap pixmap(iconNames[i]);
         for (size_t j = 0; j < ROTATE_COUNT; j++) {
-            data[i][j].addPixmap(pixmap, QIcon::Mode::Active, QIcon::State::On);
-            data[i][j].addPixmap(pixmap, QIcon::Mode::Active, QIcon::State::Off);
-            data[i][j].addPixmap(pixmap, QIcon::Mode::Normal, QIcon::State::Off);
-            pixmap = pixmap.transformed(rm);
+            data[i][j] = QIcon(pixmap);
+            QMatrix rm;
             rm.rotate(90);
+            pixmap = pixmap.transformed(rm);
         }
     }
 }

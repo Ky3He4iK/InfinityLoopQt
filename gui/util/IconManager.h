@@ -11,8 +11,6 @@
 
 class IconManager {
 private:
-
-
     const QVector<QString> iconNames = {
             "gui/grafics/svg/empty.svg",
             "gui/grafics/svg/single-blue-l.svg",
@@ -26,7 +24,6 @@ private:
 
     IconManager();
 
-
 public:
     static IconManager &getInstance();
 
@@ -35,8 +32,6 @@ public:
     IconManager(IconManager const &) = delete;
 
     void operator=(IconManager const &) = delete;
-
-
 };
 
 
