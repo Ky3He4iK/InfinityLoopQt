@@ -38,6 +38,7 @@ void FieldWidget::clearRow(size_t x) {
     }
     cellsGrid[x].clear();
     holder->removeItem(holder->itemAt(x));
+    delete rows[x];
 }
 
 void FieldWidget::clearCell(size_t x, size_t y) {

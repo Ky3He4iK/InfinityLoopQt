@@ -16,7 +16,7 @@ ControlsWidget::ControlsWidget(QWidget *parent, size_t _width, size_t _height) :
     labelWidth = new QLabel;
     labelWidth->setText("Width:");
     spinBoxWidth = new QSpinBox;
-    spinBoxWidth->setRange(2, 38);
+    spinBoxWidth->setRange(2, 37); //todo: calculate max field size
     spinBoxWidth->setValue(width);
     controlWidth->addWidget(labelWidth);
     controlWidth->addWidget(spinBoxWidth);

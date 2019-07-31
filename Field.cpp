@@ -76,12 +76,16 @@ inline const uint8_t Field::getmask(const size_t x, const size_t y) {
 }
 
 inline const uint8_t Field::gettype(const size_t x, const size_t y) {
-    return (uint8_t) (field[x][y] & TYPE_MASK) >> UINT_5;
+    if (x < height && y < width)
+        return (uint8_t) (field[x][y] & TYPE_MASK) >> UINT_5;
+    return 0;
 }
 
 
 const uint8_t Field::getrotate(const size_t x, const size_t y) {
-    return field[x][y] & ROTATE_MASK;
+    if (x < height && y < width)
+        return field[x][y] & ROTATE_MASK;
+    return 0;
 }
 
 void Field::clear() {
