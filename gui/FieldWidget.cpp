@@ -11,8 +11,8 @@ FieldWidget::FieldWidget(QWidget *parent, Field *_field) : field(_field) {
     if (field == nullptr)
         return;
     holder = new QVBoxLayout;
-    start();
     setLayout(holder);
+    start();
 
     connect(field, &Field::dataChangedSignal, this, &FieldWidget::dataChangedSlot);
 }
