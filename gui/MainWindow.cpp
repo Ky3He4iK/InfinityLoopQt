@@ -6,17 +6,14 @@
 
 #include <QVBoxLayout>
 
-MainWindow::MainWindow(QWidget *) {
-//    QVBoxLayout windowLayout;
-
-    size_t w = 5, h = 6;  //todo: parse from command line
-    field = new Field(w, h);
+MainWindow::MainWindow(size_t width, size_t height) {
+    field = new Field(width, height);
 
     fieldWidget = new FieldWidget(Q_NULLPTR, field);
     fieldWidget->adjustSize();
     fieldWidget->setWindowTitle("Field | InfinityLoopQt");
     fieldWidget->show();
-    controlsWidget = new ControlsWidget(Q_NULLPTR, w, h);
+    controlsWidget = new ControlsWidget(Q_NULLPTR, width, height);
     controlsWidget->adjustSize();
     controlsWidget->setWindowTitle("Controls | InfinityLoopQt");
     controlsWidget->show();
