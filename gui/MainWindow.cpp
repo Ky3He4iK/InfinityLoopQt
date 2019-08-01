@@ -5,7 +5,6 @@
 #include "MainWindow.h"
 
 #include <QVBoxLayout>
-
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *) {
@@ -28,9 +27,6 @@ MainWindow::MainWindow(QWidget *) {
     QSize controlsSize = controlsWidget->size();
     std::cout << fieldSize.width() << 'x' << fieldSize.height() << "; " << controlsSize.width() << 'x'
               << controlsSize.height() << '\n';
-    std::cout << fieldWidget->maximumHeight() << 'x' << fieldWidget->maximumWidth() << '\n';
-
-
 //    setLayout(&windowLayout);
 //    windowLayout.addWidget(fieldWidget);
 //    windowLayout.addWidget(controlsWidget);

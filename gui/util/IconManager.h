@@ -9,6 +9,8 @@
 #include "../../Field.h"
 #include <QVector>
 
+#define ICON_SIZE 50
+
 class IconManager {
 private:
     const QVector<QString> iconNames = {

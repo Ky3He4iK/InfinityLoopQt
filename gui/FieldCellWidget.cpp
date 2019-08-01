@@ -11,10 +11,9 @@ FieldCellWidget::FieldCellWidget(QWidget *parent, Field *_field, size_t _x, size
         : iconManager(IconManager::getInstance()), field(_field), x(_x), y(_y) {
 
     draw();
-    setIconSize(QSize(50, 50));
-    setFixedSize(51, 51);
+    setIconSize(QSize(ICON_SIZE, ICON_SIZE));
+    setFixedSize(ICON_SIZE + 1, ICON_SIZE + 1);
     setFlat(true);
-//    show();
     connect(this, &FieldCellWidget::clicked, this, &FieldCellWidget::clickedSlot);
     connect(this, &FieldCellWidget::rotateSignal, field, &Field::rotateSlot);
 }

@@ -3,15 +3,27 @@
 //
 
 #include "ControlsWidget.h"
+#include "util/IconManager.h"
+
+#include <QApplication>
+#include <QDesktopWidget>
 
 ControlsWidget::ControlsWidget(QWidget *parent, size_t _width, size_t _height) : width(_width), height(_height) {
+    QSize desktopSize = QApplication::desktop()->size();
+
+    size_t maxWidth = desktopSize.width() / (ICON_SIZE + 1) - 1, maxHeight = desktopSize.height() / (ICON_SIZE + 1) - 1;  //todo: parse from command line
+    if (maxHeight < 4)
+        maxHeight = 4;
+    if (maxWidth < 4)
+        maxWidth = 4;
+
     QHBoxLayout *allContent;
     allContent = new QHBoxLayout;
     controlWidth = new QVBoxLayout;
     labelWidth = new QLabel;
     labelWidth->setText("Width:");
     spinBoxWidth = new QSpinBox;
-    spinBoxWidth->setRange(2, 37); //todo: calculate max field size
+    spinBoxWidth->setRange(2, maxWidth); //todo: calculate max field size
     spinBoxWidth->setValue(width);
     controlWidth->addWidget(labelWidth);
     controlWidth->addWidget(spinBoxWidth);
@@ -21,7 +33,7 @@ ControlsWidget::ControlsWidget(QWidget *parent, size_t _width, size_t _height) :
     labelHeight = new QLabel;
     labelHeight->setText("Height:");
     spinBoxHeight = new QSpinBox;
-    spinBoxHeight->setRange(2, 20);
+    spinBoxHeight->setRange(2, maxHeight);
     spinBoxHeight->setValue(height);
     controlHeight->addWidget(labelHeight);
     controlHeight->addWidget(spinBoxHeight);
