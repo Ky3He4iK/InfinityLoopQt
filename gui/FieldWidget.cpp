@@ -11,7 +11,7 @@ FieldWidget::FieldWidget(QWidget *, Field *_field) : field(_field) {
 
     // set black background
     QPalette pal = palette();
-    pal.setColor(QPalette::Background, Qt::black);
+    pal.setColor(QPalette::Background, QColor(0, 0, 0));
     setAutoFillBackground(true);
     setPalette(pal);
 

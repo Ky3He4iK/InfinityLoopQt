@@ -5,13 +5,8 @@
 #include "ControlsWidget.h"
 
 ControlsWidget::ControlsWidget(QWidget *parent, size_t _width, size_t _height) : width(_width), height(_height) {
-    //todo: icon to applyButton
-
     QHBoxLayout *allContent;
-
-
     allContent = new QHBoxLayout;
-
     controlWidth = new QVBoxLayout;
     labelWidth = new QLabel;
     labelWidth->setText("Width:");

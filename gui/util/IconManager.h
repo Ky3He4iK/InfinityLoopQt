@@ -13,11 +13,11 @@ class IconManager {
 private:
     const QVector<QString> iconNames = {
             "gui/grafics/svg/empty.svg",
-            "gui/grafics/svg/single-blue-l.svg",
-            "gui/grafics/svg/corner-blue-ld.svg",
-            "gui/grafics/svg/triple-blue-uld.svg",
-            "gui/grafics/svg/quadriple-blue-uldr.svg",
-            "gui/grafics/svg/line-blue-lr.svg"
+            "gui/grafics/svg/single-white-l.svg",
+            "gui/grafics/svg/corner-white-ld.svg",
+            "gui/grafics/svg/triple-white-uld.svg",
+            "gui/grafics/svg/quadriple-white-uldr.svg",
+            "gui/grafics/svg/line-white-lr.svg"
     };
 
     QVector<QVector<QIcon> > data;
