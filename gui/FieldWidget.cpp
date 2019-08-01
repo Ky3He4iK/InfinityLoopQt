@@ -3,39 +3,23 @@
 //
 
 #include "FieldWidget.h"
-#include <algorithm>
 
 FieldWidget::FieldWidget(QWidget *, Field *_field) : field(_field) {
-//    setHorizontalSpacing(0);
-//    setVerticalSpacing(0);
-
     // set black background
     QPalette pal = palette();
     pal.setColor(QPalette::Background, QColor(0, 0, 0));
     setAutoFillBackground(true);
     setPalette(pal);
 
-    if (field == nullptr)
-        return;
     holder = new QVBoxLayout;
     setLayout(holder);
     start();
-
     connect(field, &Field::dataChangedSignal, this, &FieldWidget::dataChangedSlot);
 }
 
-void FieldWidget::clear() {
-    for (size_t x = 0; x < cellsGrid.size(); x++)
-        clearRow(x);
-
-    cellsGrid.clear();
-    rows.clear();
-}
-
 void FieldWidget::clearRow(size_t x) {
-    for (size_t y = 0; y < cellsGrid[x].size(); y++) {
+    for (size_t y = 0; y < cellsGrid[x].size(); y++)
         clearCell(x, y);
-    }
     cellsGrid[x].clear();
     holder->removeItem(holder->itemAt(x));
     delete rows[x];
@@ -51,9 +35,9 @@ void FieldWidget::clearCell(size_t x, size_t y) {
 
 void FieldWidget::start() {
     holder->setSpacing(0);
-    cellsGrid.resize(field->getHeigth());
-    rows.resize(field->getHeigth());
-    for (size_t x = 0; x < field->getHeigth(); x++)
+    cellsGrid.resize(field->getHeight());
+    rows.resize(field->getHeight());
+    for (size_t x = 0; x < field->getHeight(); x++)
         addRow(x);
 }
 
@@ -74,19 +58,17 @@ void FieldWidget::addCell(size_t x, size_t y) {
 }
 
 void FieldWidget::dataChangedSlot() {
-    if (cellsGrid[0].size() != field->getWidth() || cellsGrid.size() != field->getHeigth()) {
-//        clear();
-//        start();
+    if (cellsGrid[0].size() != field->getWidth() || cellsGrid.size() != field->getHeight()) {
         rearrange();
-        resize(cellsGrid[0][0]->size().width() * field->getWidth(), cellsGrid[0][0]->size().height() * field->getHeigth());
+        resize(cellsGrid[0][0]->size().width() * field->getWidth(),
+               cellsGrid[0][0]->size().height() * field->getHeight());
         adjustSize();
     }
-
     emit redrawSignal();
 }
 
 void FieldWidget::rearrange() {
-    size_t old_w = cellsGrid[0].size(), old_h = cellsGrid.size(), new_w = field->getWidth(), new_h = field->getHeigth();
+    size_t old_w = cellsGrid[0].size(), old_h = cellsGrid.size(), new_w = field->getWidth(), new_h = field->getHeight();
     for (size_t x = 0; x < std::min(old_h, new_h); x++) {
         if (old_w >= new_w) {
             for (size_t y = new_w; y < old_w; y++)
@@ -101,7 +83,6 @@ void FieldWidget::rearrange() {
     if (old_h >= new_h) {
         for (size_t x = new_h; x < old_h; x++)
             clearRow(x);
-
         cellsGrid.resize(new_h);
         rows.resize(new_h);
     } else {

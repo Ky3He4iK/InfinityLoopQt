@@ -8,10 +8,10 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
-ControlsWidget::ControlsWidget(QWidget *parent, size_t _width, size_t _height) : width(_width), height(_height) {
-    QSize desktopSize = QApplication::desktop()->size();
-
-    size_t maxWidth = desktopSize.width() / (ICON_SIZE + 1) - 1, maxHeight = desktopSize.height() / (ICON_SIZE + 1) - 1;  //todo: parse from command line
+ControlsWidget::ControlsWidget(QWidget *, size_t _width, size_t _height) : width(_width), height(_height) {
+    QRect desktopSize = QApplication::desktop()->availableGeometry();
+    size_t maxWidth = desktopSize.width() / (ICON_SIZE + 1), maxHeight =
+            desktopSize.height() / (ICON_SIZE + 1);
     if (maxHeight < 4)
         maxHeight = 4;
     if (maxWidth < 4)
@@ -23,7 +23,7 @@ ControlsWidget::ControlsWidget(QWidget *parent, size_t _width, size_t _height) :
     labelWidth = new QLabel;
     labelWidth->setText("Width:");
     spinBoxWidth = new QSpinBox;
-    spinBoxWidth->setRange(2, maxWidth); //todo: calculate max field size
+    spinBoxWidth->setRange(2, maxWidth);
     spinBoxWidth->setValue(width);
     controlWidth->addWidget(labelWidth);
     controlWidth->addWidget(spinBoxWidth);
@@ -44,7 +44,6 @@ ControlsWidget::ControlsWidget(QWidget *parent, size_t _width, size_t _height) :
     allContent->addWidget(applyButton);
 
     setLayout(allContent);
-
     connect(spinBoxWidth, QOverload<int>::of(&QSpinBox::valueChanged), this, &ControlsWidget::changeWidthSlot);
     connect(spinBoxHeight, QOverload<int>::of(&QSpinBox::valueChanged), this, &ControlsWidget::changeHeightSlot);
     connect(applyButton, &QPushButton::clicked, this, &ControlsWidget::applySlot);
@@ -58,6 +57,6 @@ void ControlsWidget::changeWidthSlot(size_t _width) {
     width = _width;
 }
 
-void ControlsWidget::changeHeightSlot(int _height) {
+void ControlsWidget::changeHeightSlot(size_t _height) {
     height = _height;
 }

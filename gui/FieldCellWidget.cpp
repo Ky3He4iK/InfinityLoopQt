@@ -7,10 +7,10 @@
 #include <QApplication>
 #include "FieldCellWidget.h"
 
-FieldCellWidget::FieldCellWidget(QWidget *parent, Field *_field, size_t _x, size_t _y)
+FieldCellWidget::FieldCellWidget(QWidget *, Field *_field, size_t _x, size_t _y)
         : iconManager(IconManager::getInstance()), field(_field), x(_x), y(_y) {
 
-    draw();
+    redrawSlot();
     setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     setFixedSize(ICON_SIZE + 1, ICON_SIZE + 1);
     setFlat(true);
@@ -18,22 +18,11 @@ FieldCellWidget::FieldCellWidget(QWidget *parent, Field *_field, size_t _x, size
     connect(this, &FieldCellWidget::rotateSignal, field, &Field::rotateSlot);
 }
 
-
-void FieldCellWidget::draw() {
-    setIcon(iconManager.getIcon(field->gettype(x, y), field->getrotate(x, y)));
-}
-
 void FieldCellWidget::redrawSlot() {
-    draw();
+    setIcon(iconManager.getIcon(field->getType(x, y), field->getRotation(x, y)));
 }
 
 void FieldCellWidget::clickedSlot() {
     emit rotateSignal(x, y);
-    draw();
-}
-
-void FieldCellWidget::relocate(size_t _x, size_t _y) {
-    x = _x;
-    y = _y;
-    draw();
+    redrawSlot();
 }

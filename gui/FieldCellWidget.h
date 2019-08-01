@@ -13,30 +13,23 @@ class FieldCellWidget : public QPushButton {
 Q_OBJECT
 
 public:
-    explicit FieldCellWidget(QWidget *parent, Field *_field, size_t _x, size_t _y);
-
-    void relocate(size_t x, size_t y);
-
-    size_t getX() { return x; }
-
-    size_t getY() { return y; }
+    explicit FieldCellWidget(QWidget *, Field *_field, size_t _x, size_t _y);
 
 private:
     IconManager &iconManager;
     Field *field;
     size_t x, y;
 
-    void draw();
-
 public slots:
+
     void clickedSlot();
 
     void redrawSlot();
 
 signals:
+
     void rotateSignal(size_t, size_t);
 
 };
-
 
 #endif //GAME_FIELDCELLWIDGET_H

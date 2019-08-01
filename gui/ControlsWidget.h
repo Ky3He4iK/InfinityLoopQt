@@ -7,7 +7,6 @@
 
 #include <QWidget>
 #include <QSpinBox>
-#include <QPlainTextEdit>
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -27,9 +26,8 @@ private:
     QVBoxLayout *controlHeight;
     QVBoxLayout *controlWidth;
 
-
 public:
-    explicit ControlsWidget(QWidget *parent = Q_NULLPTR, size_t _width = 4, size_t _height = 4);
+    explicit ControlsWidget(QWidget *, size_t _width, size_t _height);
 
 signals:
 
@@ -39,11 +37,9 @@ private slots:
 
     void changeWidthSlot(size_t _width);
 
-    void changeHeightSlot(int _height);
+    void changeHeightSlot(size_t _height);
 
     void applySlot();
-
 };
-
 
 #endif //GAME_CONTROLSWIDGET_H

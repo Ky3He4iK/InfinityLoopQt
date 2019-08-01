@@ -36,5 +36,4 @@ public:
     void operator=(IconManager const &) = delete;
 };
 
-
 #endif //GAME_ICONMANAGER_H

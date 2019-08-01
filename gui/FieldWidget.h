@@ -6,7 +6,6 @@
 #define GAME_FIELDWIDGET_H
 
 #include <QWidget>
-#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QVector>
@@ -16,16 +15,14 @@ class FieldWidget : public QWidget {
 Q_OBJECT
 
 public:
-    explicit FieldWidget(QWidget *parent = Q_NULLPTR, Field *_field = nullptr);
+    explicit FieldWidget(QWidget *, Field *_field);
 
 private:
     Field *field;
 
-    QVector<QVector<FieldCellWidget*> > cellsGrid;
-    QVector<QHBoxLayout*> rows;
+    QVector<QVector<FieldCellWidget *> > cellsGrid;
+    QVector<QHBoxLayout *> rows;
     QVBoxLayout *holder;
-
-    void clear();
 
     void clearRow(size_t x);
 
@@ -41,13 +38,11 @@ private:
 
 public slots:
 
-//    void restartSlot(Field *_field);
     void dataChangedSlot();
 
 signals:
 
     void redrawSignal();
 };
-
 
 #endif //GAME_FIELDWIDGET_H

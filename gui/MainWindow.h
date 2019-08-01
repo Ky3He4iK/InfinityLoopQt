@@ -20,8 +20,7 @@ private:
     Field *field;
 
 public:
-    explicit MainWindow(QWidget *parent = Q_NULLPTR);
-
+    explicit MainWindow(QWidget * = Q_NULLPTR);
 };
 
 

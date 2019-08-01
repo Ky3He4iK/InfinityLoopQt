@@ -4,26 +4,21 @@
 
 #include "Field.h"
 
-#include <unistd.h>
-#include <iostream>
-
 Field::Field(const size_t _width, const size_t _height) : width(_width), height(_height) {
-    srand(time(nullptr) * getpid());
     create(_width, _height);
 }
 
 void Field::restart(const size_t _width, const size_t _height) {
     clear();
-    std::cout << "\nRestarting...\n";
     create(_width, _height);
 }
 
 void Field::rotate(const size_t x, const size_t y) {
-    uint8_t newrot = ((field[x][y] & ROTATE_MASK) + UINT_1) % UINT_4;
-    uint8_t type = gettype(x, y);
-    if (newrot != 0 && types[type][newrot].second == types[type][0].second)
-        newrot = 0;
-    field[x][y] = (uint8_t) (field[x][y] & TYPE_MASK) | newrot;
+    uint8_t newRotation = ((field[x][y] & ROTATE_MASK) + UINT_1) % UINT_4;
+    uint8_t type = getType(x, y);
+    if (newRotation != 0 && types[type][newRotation].second == types[type][0].second)
+        newRotation = 0;
+    field[x][y] = (uint8_t) (field[x][y] & TYPE_MASK) | newRotation;
     if (check(x, y) && check())
         restart(width, height);
 
@@ -33,56 +28,52 @@ void Field::rotate(const size_t x, const size_t y) {
 const bool Field::check() {
     for (size_t x = 0; x < height; x++)
         for (size_t y = 0; y < width; y++)
-            if (!check(x, y)) {
-                std::cout << "Err at " << x << ' ' << y << '\n';
-                std::cout << check(x, y) << '\n';
+            if (!check(x, y))
                 return false;
-            }
-
     return true;
 }
 
 const bool Field::check(const size_t x, const size_t y) {
-    uint8_t mask = getmask(x, y);
+    uint8_t mask = getMask(x, y);
     if (x == 0) {
         if (mask & UINT_1)
             return false;
-    } else if (((uint8_t) (getmask(x - 1, y) & UINT_4) >> UINT_2) != (mask & UINT_1))
+    } else if (((uint8_t) (getMask(x - 1, y) & UINT_4) >> UINT_2) != (mask & UINT_1))
         return false;
 
     if (y == 0) {
         if (mask & UINT_8)
             return false;
-    } else if (((uint8_t) (getmask(x, y - 1) & UINT_2) >> UINT_1) != ((uint8_t) (mask & UINT_8) >> UINT_3))
+    } else if (((uint8_t) (getMask(x, y - 1) & UINT_2) >> UINT_1) != ((uint8_t) (mask & UINT_8) >> UINT_3))
         return false;
 
     if (x + 1 == height) {
         if (mask & UINT_4)
             return false;
-    } else if ((getmask(x + 1, y) & UINT_1) != ((uint8_t) (mask & UINT_4) >> UINT_2))
+    } else if ((getMask(x + 1, y) & UINT_1) != ((uint8_t) (mask & UINT_4) >> UINT_2))
         return false;
 
     if (y + 1 == width) {
         if (mask & UINT_2)
             return false;
-    } else if (((uint8_t) (getmask(x, y + 1) & UINT_8) >> UINT_3) != ((uint8_t) (mask & UINT_2) >> UINT_1))
+    } else if (((uint8_t) (getMask(x, y + 1) & UINT_8) >> UINT_3) != ((uint8_t) (mask & UINT_2) >> UINT_1))
         return false;
 
     return true;
 }
 
-inline const uint8_t Field::getmask(const size_t x, const size_t y) {
-    return types[gettype(x, y)][(field[x][y] & (uint8_t) 3)].second;
+inline const uint8_t Field::getMask(size_t x, size_t y) {
+    return types[getType(x, y)][(field[x][y] & (uint8_t) 3)].second;
 }
 
-inline const uint8_t Field::gettype(const size_t x, const size_t y) {
+inline const uint8_t Field::getType(size_t x, size_t y) {
     if (x < height && y < width)
         return (uint8_t) (field[x][y] & TYPE_MASK) >> UINT_5;
     return 0;
 }
 
 
-const uint8_t Field::getrotate(const size_t x, const size_t y) {
+const uint8_t Field::getRotation(size_t x, size_t y) {
     if (x < height && y < width)
         return field[x][y] & ROTATE_MASK;
     return 0;
@@ -122,10 +113,6 @@ void Field::create(const size_t _width, const size_t _height) {
         }
         odd_row = !odd_row;
     }
-
-    std::cout << "in progress\n";
-    print(std::cout);
-
     odd_row = true;
     for (size_t x = 0; x < height; x++) {
         for (size_t y = (odd_row ? 0 : 1); y < width; y += 2) {
@@ -147,21 +134,7 @@ void Field::create(const size_t _width, const size_t _height) {
         odd_row = !odd_row;
     }
 
-    print(std::cout);
-    std::cout << check() << '\n';
-
     shuffle();
-    print(std::cout);
-}
-
-const void Field::print(std::ostream &out) {
-    out << '\n';
-    for (auto &row: field) {
-        for (auto &cell: row) {
-            out << types[(uint8_t) (cell & TYPE_MASK) >> UINT_5][cell & ROTATE_MASK].first;
-        }
-        out << '\n';
-    }
 }
 
 void Field::shuffle() {
@@ -177,5 +150,4 @@ void Field::restartSlot(size_t _width, size_t _height) {
 
 void Field::rotateSlot(const size_t x, const size_t y) {
     rotate(x, y);
-    print(std::cout);
 }
