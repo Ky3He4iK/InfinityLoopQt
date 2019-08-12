@@ -9,7 +9,7 @@
 #include "../../Field.h"
 #include <QVector>
 
-#define ICON_SIZE 50
+#define DEFAULT_ICON_SIZE 50
 
 class IconManager {
 private:
@@ -26,6 +26,8 @@ private:
 
     IconManager();
 
+    static size_t iconSize;
+
 public:
     static IconManager &getInstance();
 
@@ -34,6 +36,10 @@ public:
     IconManager(IconManager const &) = delete;
 
     void operator=(IconManager const &) = delete;
+
+    static size_t getIconSize();
+
+    void setIconSize(size_t);
 };
 
 #endif //GAME_ICONMANAGER_H

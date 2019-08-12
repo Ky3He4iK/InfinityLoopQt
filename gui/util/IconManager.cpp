@@ -5,6 +5,7 @@
 #include "IconManager.h"
 
 IconManager::IconManager() {
+    iconSize = DEFAULT_ICON_SIZE;
     data.resize(TYPE_COUNT);
     for (size_t i = 0; i < TYPE_COUNT; i++) {
         data[i].resize(ROTATE_COUNT);
@@ -25,4 +26,12 @@ IconManager &IconManager::getInstance() {
 
 QIcon IconManager::getIcon(size_t type, size_t rotation) {
     return data[type][rotation];
+}
+
+size_t IconManager::getIconSize() {
+    return iconSize;
+}
+
+void IconManager::setIconSize(size_t _iconSize) {
+    iconSize = _iconSize;
 }

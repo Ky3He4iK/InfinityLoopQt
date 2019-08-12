@@ -10,8 +10,9 @@
 
 ControlsWidget::ControlsWidget(QWidget *, size_t _width, size_t _height) : width(_width), height(_height) {
     QRect desktopSize = QApplication::desktop()->availableGeometry();
-    size_t maxWidth = desktopSize.width() / (ICON_SIZE + 1), maxHeight =
-            desktopSize.height() / (ICON_SIZE + 1);
+    size_t iconSize = IconManager::getIconSize();
+    size_t maxWidth = desktopSize.width() / (iconSize + 1), maxHeight =
+            desktopSize.height() / (iconSize + 1);
     if (maxHeight < 4)
         maxHeight = 4;
     if (maxWidth < 4)
