@@ -4,8 +4,9 @@
 
 #include "IconManager.h"
 
+size_t IconManager::iconSize = 16;
+
 IconManager::IconManager() {
-    iconSize = DEFAULT_ICON_SIZE;
     data.resize(TYPE_COUNT);
     for (size_t i = 0; i < TYPE_COUNT; i++) {
         data[i].resize(ROTATE_COUNT);
@@ -34,4 +35,5 @@ size_t IconManager::getIconSize() {
 
 void IconManager::setIconSize(size_t _iconSize) {
     iconSize = _iconSize;
+    emit iconResizeSignal(iconSize);
 }

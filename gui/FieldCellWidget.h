@@ -26,6 +26,8 @@ public slots:
 
     void redrawSlot();
 
+    void resizeSlot(size_t iconSize);
+
 signals:
 
     void rotateSignal(size_t, size_t);

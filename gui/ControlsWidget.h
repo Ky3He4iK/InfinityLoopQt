@@ -16,28 +16,28 @@ class ControlsWidget : public QWidget {
 Q_OBJECT
 
 private:
-    size_t width, height;
     QLabel *labelWidth;
     QSpinBox *spinBoxWidth;
     QLabel *labelHeight;
     QSpinBox *spinBoxHeight;
+    QLabel *labelIconSize;
+    QSpinBox *spinBoxIconSize;
     QPushButton *applyButton;
 
     QVBoxLayout *controlHeight;
     QVBoxLayout *controlWidth;
+    QVBoxLayout *controlIconSize;
+
+    void updateSpinBoxes(size_t iconSize);
 
 public:
-    explicit ControlsWidget(QWidget *, size_t _width, size_t _height);
+    explicit ControlsWidget(QWidget *, size_t width, size_t height);
 
 signals:
 
     void resizeSignal(size_t width, size_t height);
 
 private slots:
-
-    void changeWidthSlot(size_t _width);
-
-    void changeHeightSlot(size_t _height);
 
     void applySlot();
 };

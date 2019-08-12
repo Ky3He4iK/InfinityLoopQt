@@ -8,10 +8,11 @@
 #include <QIcon>
 #include "../../Field.h"
 #include <QVector>
+#include <QObject>
 
-#define DEFAULT_ICON_SIZE 50
+class IconManager : public QObject {
+Q_OBJECT
 
-class IconManager {
 private:
     const QVector<QString> iconNames = {
             "gui/grafics/svg/empty.svg",
@@ -40,6 +41,11 @@ public:
     static size_t getIconSize();
 
     void setIconSize(size_t);
+
+signals:
+    void iconResizeSignal(size_t newIconSize);
 };
+
+//size_t IconManager::iconSize = 50;
 
 #endif //GAME_ICONMANAGER_H
