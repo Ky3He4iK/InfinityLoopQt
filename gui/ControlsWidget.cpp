@@ -36,7 +36,7 @@ ControlsWidget::ControlsWidget(QWidget *, size_t width, size_t height) {
     labelIconSize = new QLabel;
     labelIconSize->setText("Icon size:");
     spinBoxIconSize = new QSpinBox;
-    spinBoxIconSize->setRange(3, maxIconSize);
+    spinBoxIconSize->setRange(16, maxIconSize);
     spinBoxIconSize->setValue(iconSize);
     controlIconSize->addWidget(labelIconSize);
     controlIconSize->addWidget(spinBoxIconSize);

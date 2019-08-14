@@ -6,7 +6,7 @@
 
 #include <QVBoxLayout>
 
-MainWindow::MainWindow(size_t width, size_t height) {
+MainWindow::MainWindow(size_t width, size_t height, size_t iconSize) {
     field = new Field(width, height);
 
     fieldWidget = new FieldWidget(Q_NULLPTR, field);

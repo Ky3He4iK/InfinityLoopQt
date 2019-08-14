@@ -18,7 +18,10 @@ int main(int argc, char *argv[]) {
                                       "main", "width"), "5"},
                               {QStringList() << "y" << "height", QApplication::translate("main",
                                                                                          "<height> cells in single column"), QApplication::translate(
-                                      "main", "height"), "6"}
+                                      "main", "height"), "6"},
+                              {QStringList() << "s" << "size", QApplication::translate("main",
+                                                                                         "icon size in pixels"), QApplication::translate(
+                                      "main", "size"), "50"}
                       });
     parser.process(app);
     if (parser.isSet(versionOption)) {
@@ -42,7 +45,13 @@ int main(int argc, char *argv[]) {
         std::cout << "Error: <height> is invalid!\nGiven value: " << qPrintable(height) << '\n';
         return 1;
     }
+    QString size = parser.value("size");
+    size_t s = height.toInt(&ok2);
+    if (!ok2) {
+        std::cout << "Error: <size> is invalid!\nGiven value: " << qPrintable(size) << '\n';
+        return 1;
+    }
 
-    MainWindow mainWindow(w, h);
+    MainWindow mainWindow(w, h, s);
     return QApplication::exec();
 }
