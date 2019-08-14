@@ -40,6 +40,8 @@ public slots:
 
     void dataChangedSlot();
 
+    void resizeSlot(size_t newSize = 0);
+
 signals:
 
     void redrawSignal();
