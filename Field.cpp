@@ -4,12 +4,17 @@
 
 #include "Field.h"
 
+#include "solver/Solver.h"
+
+#include <iostream>
+
 Field::Field(const size_t _width, const size_t _height) : width(_width), height(_height) {
     create(_width, _height);
 }
 
 void Field::restart(const size_t _width, const size_t _height) {
     clear();
+    Solver::getInstance().clearPersistence();
     create(_width, _height);
 }
 
@@ -135,6 +140,16 @@ void Field::create(const size_t _width, const size_t _height) {
     }
 
     shuffle();
+    print();
+
+    /*Solver solver = Solver::getInstance();
+    auto move = solver.getNextMove(*this);
+    while (move.first != (size_t) -1) {
+        rotate(move.first, move.second);
+        std::cout << move.first << ';' << move.second << '\n';
+        print();
+        move = solver.getNextMove(*this);
+    }*/
 }
 
 void Field::shuffle() {
@@ -150,4 +165,14 @@ void Field::restartSlot(size_t _width, size_t _height) {
 
 void Field::rotateSlot(const size_t x, const size_t y) {
     rotate(x, y);
+}
+
+void Field::print() const {
+    std::cout << '\n';
+    for (auto &row: field) {
+        for (auto &cell: row) {
+            std::cout << types[(uint8_t) (cell & TYPE_MASK) >> UINT_5][cell & ROTATE_MASK].first;
+        }
+        std::cout << '\n';
+    }
 }

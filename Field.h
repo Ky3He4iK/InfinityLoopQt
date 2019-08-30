@@ -20,7 +20,11 @@
 #define UINT_3 (uint8_t) 3
 #define UINT_4 (uint8_t) 4
 #define UINT_5 (uint8_t) 5
+#define UINT_6 (uint8_t) 6
+#define UINT_7 (uint8_t) 7
 #define UINT_8 (uint8_t) 8
+
+#define UINT (uint8_t)
 
 class Field : public QObject {
 Q_OBJECT
@@ -44,6 +48,8 @@ private:
 
     void shuffle();
 
+    void print() const;
+
 public:
     Field(size_t, size_t);
 
@@ -64,6 +70,15 @@ public:
     const size_t getWidth() { return width; }
 
     const size_t getHeight() { return height; }
+
+    enum Type {
+        empty = 0,
+        single = 1,
+        corner = 2,
+        triple = 3,
+        quadriple = 4,
+        line = 5,
+    };
 
 signals:
 
