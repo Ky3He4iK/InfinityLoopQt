@@ -6,8 +6,8 @@
 
 #include <QVBoxLayout>
 
-MainWindow::MainWindow(size_t width, size_t height, size_t iconSize) {
-    field = new Field(width, height);
+MainWindow::MainWindow(size_t width, size_t height, size_t iconSize, bool solve) {
+    field = new Field(width, height, solve);
 
     fieldWidget = new FieldWidget(Q_NULLPTR, field);
     fieldWidget->adjustSize();

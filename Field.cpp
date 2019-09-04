@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-Field::Field(const size_t _width, const size_t _height) : width(_width), height(_height) {
+Field::Field(const size_t _width, const size_t _height, bool _runSolver) : width(_width), height(_height), runSolver(_runSolver) {
     create(_width, _height);
 }
 
@@ -140,16 +140,17 @@ void Field::create(const size_t _width, const size_t _height) {
     }
 
     shuffle();
-    print();
-
-    /*Solver solver = Solver::getInstance();
-    auto move = solver.getNextMove(*this);
-    while (move.first != (size_t) -1) {
-        rotate(move.first, move.second);
-        std::cout << move.first << ';' << move.second << '\n';
+    if (runSolver) {
         print();
-        move = solver.getNextMove(*this);
-    }*/
+        Solver solver = Solver::getInstance();
+        auto move = solver.getNextMove(*this);
+        while (move.first != (size_t) -1) {
+            rotate(move.first, move.second);
+            std::cout << move.first << ';' << move.second << '\n';
+            print();
+            move = solver.getNextMove(*this);
+        }
+    }
 }
 
 void Field::shuffle() {

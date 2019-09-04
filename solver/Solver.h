@@ -18,6 +18,7 @@ public:
 
 private:
     std::vector <std::vector<bool>> isDone;
+    bool isRetried = false;
 
     uint8_t getNeighbors(size_t x, size_t y, Field &field);
 

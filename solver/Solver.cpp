@@ -5,6 +5,7 @@
 #include "Solver.h"
 
 #include <set>
+#include <iostream>
 
 Solver &Solver::getInstance() {
     static Solver instance;
@@ -18,10 +19,11 @@ std::pair<size_t, size_t> Solver::getNextMove(Field &field) {
         clearPersistence();
         isDone.resize(field.getHeight(), std::vector<bool>(field.getWidth()));
         for (size_t x = 0; x < isDone.size(); x++)
-            for (size_t y = 0; y < isDone[0].size(); y++)
-                if (field.getType(x, y) == Field::empty || field.getType(x, y) == Field::quadriple)
+            for (size_t y = 0; y < isDone[0].size(); y++) {
+                auto mask = field.getMask(x, y);
+                if (mask == (UINT (UINT (mask & UINT_7) << UINT_1) | UINT (UINT (mask & UINT_8) >> UINT_3)))
                     isDone[x][y] = true;
-
+            }
     }
 
     for (size_t x = 0; x < isDone.size(); x++)
@@ -29,9 +31,7 @@ std::pair<size_t, size_t> Solver::getNextMove(Field &field) {
             if (isDone[x][y])
                 continue;
             uint8_t neighbors = getNeighbors(x, y, field), mask = field.getMask(x, y);
-//            std::vector<uint8_t> suite;
             std::set<uint8_t> suite;
-//            suite.reserve(4);
             for (uint8_t rot = 0; rot < 4; rot++) {
                 if (checkNeighbors(mask, neighbors))
                     suite.emplace(mask);
@@ -47,8 +47,19 @@ std::pair<size_t, size_t> Solver::getNextMove(Field &field) {
             }
         }
 
-
-    return nextMove;
+    std::cout << '\n';
+    for (auto &row: isDone) {
+        for (auto cell: row)
+            std::cout << cell;
+        std::cout << '\n';
+    }
+    if (isRetried)
+        return nextMove;
+    else {
+        clearPersistence();
+        isRetried = true;
+        return getNextMove(field);
+    }
 }
 
 void Solver::clearPersistence() {
@@ -72,11 +83,10 @@ uint8_t Solver::getNeighbors(size_t x, size_t y, Field &field) {
     else
         res |= UINT (UINT (UINT (field.getMask(x, y - 1) & UINT_2) >> UINT_1) |
                      UINT (UINT isDone[x][y - 1] << UINT_1));
-
     if (x + 1 == isDone.size())
         res |= UINT_8;
     else
-        res |= UINT (UINT (UINT (field.getMask(x + 1, y) & UINT_1) << UINT_3) |
+        res |= UINT (UINT (UINT (field.getMask(x + 1, y) & UINT_1) << UINT_2) |
                      UINT (UINT isDone[x + 1][y] << UINT_3));
 
     if (y + 1 == isDone[0].size())
@@ -90,7 +100,7 @@ uint8_t Solver::getNeighbors(size_t x, size_t y, Field &field) {
 bool Solver::checkNeighbors(uint8_t mask, uint8_t neighbors) {
     for (uint8_t dir = 0; dir < 4; dir++) {
         if ((UINT (neighbors >> UINT (dir * UINT_2 + UINT_1)) & UINT_1) &&
-            ((UINT (neighbors >> UINT (dir * UINT_2)) & UINT_1) != (UINT (mask >> UINT (UINT_1 << dir)) & UINT_1)))
+            ((UINT (neighbors >> UINT (dir * UINT_2)) & UINT_1) != (UINT (mask >> UINT (UINT_3 - dir)) & UINT_1)))
             return false;
     }
     return true;

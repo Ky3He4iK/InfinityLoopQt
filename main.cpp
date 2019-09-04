@@ -13,15 +13,22 @@ int main(int argc, char *argv[]) {
     auto helpOption = parser.addHelpOption();
     auto versionOption = parser.addVersionOption();
     parser.addOptions({
-                              {QStringList() << "x" << "w" << "width",  QApplication::translate("main",
-                                                                                         "<width> cells in single row"),     QApplication::translate(
-                                      "main", "width"), "5"},
-                              {QStringList() << "y" << "height", QApplication::translate("main",
-                                                                                         "<height> cells in single column"), QApplication::translate(
-                                      "main", "height"), "6"},
-                              {QStringList() << "s" << "size", QApplication::translate("main",
-                                                                                         "icon size in pixels"), QApplication::translate(
-                                      "main", "size"), "50"}
+                              {QStringList() << "x" << "w" << "width", QApplication::translate("main",
+                                                                                               "<width> cells in single row"),
+                                      QApplication::translate(
+                                              "main", "width"),  "5"},
+                              {QStringList() << "y" << "height",       QApplication::translate("main",
+                                                                                               "<height> cells in single column"),
+                                      QApplication::translate(
+                                              "main", "height"), "6"},
+                              {QStringList() << "s" << "size",         QApplication::translate("main",
+                                                                                               "icon size in pixels"),
+                                      QApplication::translate(
+                                              "main", "size"),   "50"},
+                              {
+                               QStringList() << "S" << "solver",       QApplication::translate("main",
+                                                                                               "solve level with built-in solver before showing")
+                              }
                       });
     parser.process(app);
     if (parser.isSet(versionOption)) {
@@ -46,12 +53,14 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     QString size = parser.value("size");
-    size_t s = height.toInt(&ok2);
+    size_t s = size.toInt(&ok2);
     if (!ok2) {
         std::cout << "Error: <size> is invalid!\nGiven value: " << qPrintable(size) << '\n';
         return 1;
     }
 
-    MainWindow mainWindow(w, h, s);
+    bool solve = parser.isSet("solver");
+
+    MainWindow mainWindow(w, h, s, solve);
     return QApplication::exec();
 }

@@ -40,6 +40,8 @@ private:
             {{"─", 10}, {"│", 5},  {"─", 10}, {"│", 5}}
     };
 
+    bool runSolver;
+
     std::random_device random;
 
     void clear();
@@ -51,7 +53,7 @@ private:
     void print() const;
 
 public:
-    Field(size_t, size_t);
+    Field(size_t, size_t, bool);
 
     void restart(size_t _width, size_t _height);
 
