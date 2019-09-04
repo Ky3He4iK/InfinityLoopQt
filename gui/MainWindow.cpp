@@ -4,9 +4,13 @@
 
 #include "MainWindow.h"
 
+#include "util/IconManager.h"
+
 #include <QVBoxLayout>
 
 MainWindow::MainWindow(size_t width, size_t height, size_t iconSize, bool solve) {
+    IconManager::getInstance().setIconSize(iconSize);
+
     field = new Field(width, height, solve);
 
     fieldWidget = new FieldWidget(Q_NULLPTR, field);
