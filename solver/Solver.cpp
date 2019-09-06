@@ -12,7 +12,7 @@ Solver &Solver::getInstance() {
     return instance;
 }
 
-std::pair<size_t, size_t> Solver::getNextMove(Field &field) {
+std::pair<size_t, size_t> Solver::getNextMove(Field &field, uint8_t solverLevel) {
     std::pair<size_t, size_t> nextMove = {-1, -1};
 
     if (isDone.size() != field.getHeight() || isDone[0].size() != field.getWidth()) {
@@ -48,22 +48,26 @@ std::pair<size_t, size_t> Solver::getNextMove(Field &field) {
         }
 
     std::cout << '\n';
-    for (auto &row: isDone) {
+    for (auto &row: findComponent()) {
         for (auto cell: row)
             std::cout << cell;
         std::cout << '\n';
     }
-    if (isRetried)
-        return nextMove;
-    else {
-        clearPersistence();
-        isRetried = true;
-        return getNextMove(field);
-    }
+    return {-1, -1};
+//    if (isRetried)
+//        return nextMove;
+//    else {
+//        clearPersistence();
+//        isRetried = true;
+//        return getNextMove(field);
+//    }
 }
 
 void Solver::clearPersistence() {
     isDone.clear();
+    while (!queue.empty())
+        queue.pop();
+
 }
 
 /// 0b__XY__________XY__________XY___________XY
@@ -104,4 +108,36 @@ bool Solver::checkNeighbors(uint8_t mask, uint8_t neighbors) {
             return false;
     }
     return true;
+}
+
+std::vector<std::vector<size_t> > Solver::findComponent() {
+    std::vector<std::vector<size_t>> component(isDone.size(), std::vector<size_t>(isDone[0].size(), 0));
+    size_t mc = 1;
+    for (size_t x = 0; x < isDone.size(); x++)
+        for (size_t y = 0; y < isDone[x].size(); y++)
+            if (!isDone[x][y] && !component[x][y]) {
+                component[x][y] = mc;
+                if (x < isDone.size() - 1)
+                    checkComponent(x + 1, y, mc, component);
+                if (y < isDone[0].size() - 1)
+                    checkComponent(x, y + 1, mc, component);
+                mc++;
+            }
+    return component;
+}
+
+void Solver::checkComponent(size_t x, size_t y, size_t value, std::vector<std::vector<size_t> > &component) {
+    if (component[x][y])
+        return;
+    if (!isDone[x][y]) {
+        component[x][y] = value;
+        if (x < isDone.size() - 1)
+            checkComponent(x + 1, y, value, component);
+        if (y < isDone[0].size() - 1)
+            checkComponent(x, y + 1, value, component);
+        if (x > 0)
+            checkComponent(x - 1, y, value, component);
+        if (y > 0)
+            checkComponent(x, y - 1, value, component);
+    }
 }

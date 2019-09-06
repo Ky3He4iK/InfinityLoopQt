@@ -40,7 +40,7 @@ private:
             {{"─", 10}, {"│", 5},  {"─", 10}, {"│", 5}}
     };
 
-    bool runSolver;
+    uint8_t solverLevel;
 
     std::random_device random;
 
@@ -53,11 +53,11 @@ private:
     void print() const;
 
 public:
-    Field(size_t, size_t, bool);
+    Field(size_t, size_t, uint8_t _solverLevel);
 
-    void restart(size_t _width, size_t _height);
+    void restart(size_t _width, size_t _height, uint8_t _solverLevel);
 
-    void rotate(size_t x, size_t y);
+    void rotate(size_t x, size_t y, bool restartOnFin = true);
 
     const bool check();
 
@@ -88,7 +88,15 @@ signals:
 
 public slots:
 
-    void restartSlot(size_t _width, size_t _height);
+    /**
+     * @param solverLevel:
+     *      0 - use last setting
+     *      1 - do not use
+     *      2 - use only generic algorithm
+     *      3 - use brute-force algorithm for some cases that not solved by generic algorithm
+     *      4 - use brute-force algorithm for some cases + some optimizations
+     * */
+    void restartSlot(size_t _width, size_t _height, uint8_t _solverLevel = 0);
 
     void rotateSlot(size_t x, size_t y);
 

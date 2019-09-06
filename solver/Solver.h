@@ -7,22 +7,38 @@
 
 #include "../Field.h"
 #include <vector>
+#include <queue>
 
 class Solver {
 public:
     static Solver &getInstance();
 
-    std::pair<size_t, size_t> getNextMove(Field &field);
+    /**
+     * @param solverLevel:
+     *      0 - use last setting
+     *      1 - do not use
+     *      2 - use only generic algorithm
+     *      3 - use brute-force algorithm for some cases that not solved by generic algorithm
+     *      4 - use brute-force algorithm for some cases + some optimizations
+     * */
+    std::pair<size_t, size_t> getNextMove(Field &field, uint8_t solverLevel);
 
     void clearPersistence();
 
 private:
     std::vector <std::vector<bool>> isDone;
+    std::queue <std::pair <size_t, size_t> > queue;
     bool isRetried = false;
 
     uint8_t getNeighbors(size_t x, size_t y, Field &field);
 
     bool checkNeighbors(uint8_t mask, uint8_t neighbors);
+
+    std::vector<std::vector<size_t> > findComponent();
+
+    void checkComponent(size_t x, size_t y, size_t value, std::vector<std::vector<size_t> > &component);
+
+
 };
 
 

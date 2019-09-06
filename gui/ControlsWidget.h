@@ -11,6 +11,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QComboBox>
 
 class ControlsWidget : public QWidget {
 Q_OBJECT
@@ -22,20 +23,24 @@ private:
     QSpinBox *spinBoxHeight;
     QLabel *labelIconSize;
     QSpinBox *spinBoxIconSize;
+    QLabel *labelSolverLvl;
+    QComboBox *comboSolverLvl;
+
     QPushButton *applyButton;
 
     QVBoxLayout *controlHeight;
     QVBoxLayout *controlWidth;
     QVBoxLayout *controlIconSize;
+    QVBoxLayout *controlSolverLvl;
 
     void updateSpinBoxes(size_t iconSize);
 
 public:
-    explicit ControlsWidget(QWidget *, size_t width, size_t height);
+    explicit ControlsWidget(QWidget *, size_t width, size_t height, uint8_t solverLevel);
 
 signals:
 
-    void resizeSignal(size_t width, size_t height);
+    void resizeSignal(size_t width, size_t height, uint8_t solverLvl);
 
 private slots:
 

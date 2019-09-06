@@ -20,7 +20,7 @@ private:
     Field *field;
 
 public:
-    explicit MainWindow(size_t width, size_t height, size_t iconSize, bool solve);
+    explicit MainWindow(size_t width, size_t height, size_t iconSize, uint8_t solverLevel);
 };
 
 

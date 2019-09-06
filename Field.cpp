@@ -8,24 +8,26 @@
 
 #include <iostream>
 
-Field::Field(const size_t _width, const size_t _height, bool _runSolver) : width(_width), height(_height), runSolver(_runSolver) {
+Field::Field(const size_t _width, const size_t _height, uint8_t _solverLevel) : width(_width), height(_height), solverLevel(_solverLevel) {
     create(_width, _height);
 }
 
-void Field::restart(const size_t _width, const size_t _height) {
+void Field::restart(const size_t _width, const size_t _height, uint8_t _solverLevel) {
     clear();
+    if (_solverLevel != 0)
+        solverLevel = _solverLevel;
     Solver::getInstance().clearPersistence();
     create(_width, _height);
 }
 
-void Field::rotate(const size_t x, const size_t y) {
+void Field::rotate(const size_t x, const size_t y, bool restartOnFin) {
     uint8_t newRotation = ((field[x][y] & ROTATE_MASK) + UINT_1) % UINT_4;
     uint8_t type = getType(x, y);
     if (newRotation != 0 && types[type][newRotation].second == types[type][0].second)
         newRotation = 0;
     field[x][y] = (uint8_t) (field[x][y] & TYPE_MASK) | newRotation;
-    if (check(x, y) && check())
-        restart(width, height);
+    if (restartOnFin && check(x, y) && check())
+        restart(width, height, solverLevel);
 
     emit dataChangedSignal();
 }
@@ -91,6 +93,7 @@ void Field::clear() {
 }
 
 void Field::create(const size_t _width, const size_t _height) {
+    begin:
     width = _width;
     height = _height;
 
@@ -140,15 +143,21 @@ void Field::create(const size_t _width, const size_t _height) {
     }
 
     shuffle();
-    if (runSolver) {
-        print();
+    if (solverLevel != 1) {
+//        print();
         Solver solver = Solver::getInstance();
-        auto move = solver.getNextMove(*this);
-        while (move.first != (size_t) -1) {
-            rotate(move.first, move.second);
-            std::cout << move.first << ';' << move.second << '\n';
-            print();
-            move = solver.getNextMove(*this);
+        auto move = solver.getNextMove(*this, solverLevel);
+        while (move.first < height && move.second < width) {
+            rotate(move.first, move.second, false);
+//            std::cout << move.first << ';' << move.second << '\n';
+//            print();
+            move = solver.getNextMove(*this, solverLevel);
+        }
+        if (check()) {
+            std::cout << "Solved! Restarting....\n";
+            clear();
+            solver.clearPersistence();
+            goto begin;
         }
     }
 }
@@ -160,12 +169,12 @@ void Field::shuffle() {
     emit dataChangedSignal();
 }
 
-void Field::restartSlot(size_t _width, size_t _height) {
-    restart(_width, _height);
+void Field::restartSlot(size_t _width, size_t _height, uint8_t _solverLevel) {
+    restart(_width, _height, _solverLevel);
 }
 
 void Field::rotateSlot(const size_t x, const size_t y) {
-    rotate(x, y);
+    rotate(x, y, true);
 }
 
 void Field::print() const {
