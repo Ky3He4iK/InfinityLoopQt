@@ -13,7 +13,8 @@ Solver &Solver::getInstance() {
 }
 
 std::pair<size_t, size_t> Solver::getNextMove(Field &field, uint8_t solverLevel) {
-    std::pair<size_t, size_t> nextMove = {-1, -1};
+    if (solverLevel == 1)
+        return {-1, -1};
 
     if (isDone.size() != field.getHeight() || isDone[0].size() != field.getWidth()) {
         clearPersistence();
@@ -41,19 +42,20 @@ std::pair<size_t, size_t> Solver::getNextMove(Field &field, uint8_t solverLevel)
                 if (*suite.begin() == mask)
                     isDone[x][y] = true;
                 else {
-                    nextMove = {x, y};
-                    return nextMove;
+                    return {x, y};
                 }
             }
         }
-
     std::cout << '\n';
     for (auto &row: findComponent()) {
         for (auto cell: row)
             std::cout << cell;
         std::cout << '\n';
     }
-    return {-1, -1};
+
+    if (solverLevel == 2)
+        return {-1, -1};
+
 //    if (isRetried)
 //        return nextMove;
 //    else {
@@ -61,6 +63,7 @@ std::pair<size_t, size_t> Solver::getNextMove(Field &field, uint8_t solverLevel)
 //        isRetried = true;
 //        return getNextMove(field);
 //    }
+    return {-1, -1};
 }
 
 void Solver::clearPersistence() {

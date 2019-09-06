@@ -7,6 +7,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <iostream>
 
 ControlsWidget::ControlsWidget(QWidget *, size_t width, size_t height, uint8_t solverLevel) {
     size_t iconSize = IconManager::getIconSize();
@@ -47,15 +48,13 @@ ControlsWidget::ControlsWidget(QWidget *, size_t width, size_t height, uint8_t s
     labelSolverLvl = new QLabel;
     labelSolverLvl->setText("SolverLvl:");
     comboSolverLvl = new QComboBox;
+    comboSolverLvl->setInsertPolicy(QComboBox::NoInsert);
+    comboSolverLvl->setEditable(false);
+    comboSolverLvl->addItems(QStringList() << "1 - No solve" << "2 - simple" << "3 - advanced" << "4 - intermediate");
+    comboSolverLvl->setCurrentIndex(solverLevel - 1);
     controlSolverLvl->addWidget(labelSolverLvl);
     controlSolverLvl->addWidget(comboSolverLvl);
     allContent->addLayout(controlSolverLvl);
-
-    comboSolverLvl->setInsertPolicy(QComboBox::NoInsert);
-    comboSolverLvl->setEditable(false);
-    comboSolverLvl->addItems(QStringList() << "1" << "2" << "3" << "4");
-    comboSolverLvl->setCurrentIndex(solverLevel + 1);
-
 
     updateSpinBoxes(iconSize);
     spinBoxWidth->setValue(width);
@@ -74,7 +73,8 @@ void ControlsWidget::applySlot() {
         IconManager::getInstance().setIconSize(spinBoxIconSize->value());
         updateSpinBoxes(spinBoxIconSize->value());
     }
-    emit resizeSignal(spinBoxWidth->value(), spinBoxHeight->value(), comboSolverLvl->currentIndex() - 1);
+    std::cout << comboSolverLvl->currentIndex() << '\n';
+    emit resizeSignal(spinBoxWidth->value(), spinBoxHeight->value(), comboSolverLvl->currentIndex() + 1);
 }
 
 void ControlsWidget::updateSpinBoxes(size_t iconSize) {
@@ -88,7 +88,7 @@ void ControlsWidget::updateSpinBoxes(size_t iconSize) {
     if (maxWidth < spinBoxWidth->value() || maxHeight < spinBoxHeight->value()) {
         spinBoxWidth->setValue(std::min(maxWidth, (size_t) spinBoxWidth->value()));
         spinBoxHeight->setValue(std::min(maxHeight, (size_t) spinBoxHeight->value()));
-        emit resizeSignal(spinBoxWidth->value(), spinBoxHeight->value(), comboSolverLvl->currentIndex() - 1);
+        emit resizeSignal(spinBoxWidth->value(), spinBoxHeight->value(), comboSolverLvl->currentIndex() + 1);
     }
     spinBoxWidth->setRange(2, maxWidth);
     spinBoxHeight->setRange(2, maxHeight);
