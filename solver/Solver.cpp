@@ -46,12 +46,15 @@ std::pair<size_t, size_t> Solver::getNextMove(Field &field, uint8_t solverLevel)
                 }
             }
         }
+
+#ifdef DEBUG
     std::cout << '\n';
     for (auto &row: findComponent()) {
         for (auto cell: row)
             std::cout << cell;
         std::cout << '\n';
     }
+#endif
 
     if (solverLevel == 2)
         return {-1, -1};

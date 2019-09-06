@@ -28,11 +28,10 @@ public:
 private:
     std::vector <std::vector<bool>> isDone;
     std::queue <std::pair <size_t, size_t> > queue;
-    bool isRetried = false;
 
     uint8_t getNeighbors(size_t x, size_t y, Field &field);
 
-    bool checkNeighbors(uint8_t mask, uint8_t neighbors);
+    static bool checkNeighbors(uint8_t mask, uint8_t neighbors);
 
     std::vector<std::vector<size_t> > findComponent();
 
