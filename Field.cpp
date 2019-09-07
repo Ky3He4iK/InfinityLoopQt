@@ -6,9 +6,14 @@
 
 #include "solver/Solver.h"
 
+#ifdef KY_DEBUG
+
 #include <iostream>
 
-Field::Field(const size_t _width, const size_t _height, uint8_t _solverLevel) : width(_width), height(_height), solverLevel(_solverLevel) {
+#endif
+
+Field::Field(const size_t _width, const size_t _height, uint8_t _solverLevel) : width(_width), height(_height),
+                                                                                solverLevel(_solverLevel) {
     create(_width, _height);
 }
 
@@ -32,7 +37,7 @@ void Field::rotate(const size_t x, const size_t y, bool restartOnFin) {
     emit dataChangedSignal();
 }
 
-const bool Field::check() {
+bool Field::check() const {
     for (size_t x = 0; x < height; x++)
         for (size_t y = 0; y < width; y++)
             if (!check(x, y))
@@ -40,7 +45,7 @@ const bool Field::check() {
     return true;
 }
 
-const bool Field::check(const size_t x, const size_t y) {
+bool Field::check(const size_t x, const size_t y) const {
     uint8_t mask = getMask(x, y);
     if (x == 0) {
         if (mask & UINT_1)
@@ -69,18 +74,18 @@ const bool Field::check(const size_t x, const size_t y) {
     return true;
 }
 
-inline const uint8_t Field::getMask(size_t x, size_t y) {
+uint8_t Field::getMask(size_t x, size_t y) const {
     return types[getType(x, y)][(field[x][y] & (uint8_t) 3)].second;
 }
 
-inline const uint8_t Field::getType(size_t x, size_t y) {
+uint8_t Field::getType(size_t x, size_t y) const {
     if (x < height && y < width)
         return (uint8_t) (field[x][y] & TYPE_MASK) >> UINT_5;
     return 0;
 }
 
 
-const uint8_t Field::getRotation(size_t x, size_t y) {
+ uint8_t Field::getRotation(size_t x, size_t y) const {
     if (x < height && y < width)
         return field[x][y] & ROTATE_MASK;
     return 0;
@@ -154,7 +159,9 @@ void Field::create(const size_t _width, const size_t _height) {
             move = solver.getNextMove(*this, solverLevel);
         }
         if (check()) {
+#ifdef KY_DEBUG
             std::cout << "Solved! Restarting....\n";
+#endif
             clear();
             solver.clearPersistence();
             goto begin;
@@ -177,6 +184,8 @@ void Field::rotateSlot(const size_t x, const size_t y) {
     rotate(x, y, true);
 }
 
+#ifdef KY_DEBUG
+
 void Field::print() const {
     std::cout << '\n';
     for (auto &row: field) {
@@ -186,3 +195,5 @@ void Field::print() const {
         std::cout << '\n';
     }
 }
+
+#endif

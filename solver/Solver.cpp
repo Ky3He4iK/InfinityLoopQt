@@ -5,7 +5,12 @@
 #include "Solver.h"
 
 #include <set>
+
+#ifdef KY_DEBUG
+
 #include <iostream>
+
+#endif
 
 Solver &Solver::getInstance() {
     static Solver instance;
@@ -47,7 +52,7 @@ std::pair<size_t, size_t> Solver::getNextMove(Field &field, uint8_t solverLevel)
             }
         }
 
-#ifdef DEBUG
+#ifdef KY_DEBUG
     std::cout << '\n';
     for (auto &row: findComponent()) {
         for (auto cell: row)
