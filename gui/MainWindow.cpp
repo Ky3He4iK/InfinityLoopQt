@@ -13,14 +13,22 @@ MainWindow::MainWindow(size_t width, size_t height, size_t iconSize, uint8_t sol
 
     field = new Field(width, height, solverLevel);
 
-    fieldWidget = new FieldWidget(Q_NULLPTR, field);
-    fieldWidget->adjustSize();
-    fieldWidget->setWindowTitle("Field | InfinityLoopQt");
-    fieldWidget->show();
+
     controlsWidget = new ControlsWidget(Q_NULLPTR, width, height, solverLevel);
     controlsWidget->adjustSize();
     controlsWidget->setWindowTitle("Controls | InfinityLoopQt");
     controlsWidget->show();
 
+    recreateFieldWidgetSlot();
+
     connect(controlsWidget, &ControlsWidget::resizeSignal, field, &Field::restartSlot);
+}
+
+void MainWindow::recreateFieldWidgetSlot() {
+    delete fieldWidget;
+    fieldWidget = new FieldWidget(Q_NULLPTR, field);
+    fieldWidget->adjustSize();
+    fieldWidget->setWindowTitle("Field | InfinityLoopQt");
+    fieldWidget->show();
+    connect(fieldWidget, &FieldWidget::deleteMeSignal, this, &MainWindow::recreateFieldWidgetSlot);
 }

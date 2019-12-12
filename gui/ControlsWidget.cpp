@@ -50,7 +50,7 @@ ControlsWidget::ControlsWidget(QWidget *, size_t width, size_t height, uint8_t s
     comboSolverLvl = new QComboBox;
     comboSolverLvl->setInsertPolicy(QComboBox::NoInsert);
     comboSolverLvl->setEditable(false);
-    comboSolverLvl->addItems(QStringList() << "1 - No solve" << "2 - simple" << "3 - advanced" << "4 - intermediate");
+    comboSolverLvl->addItems(QStringList() << "1 - No solve" << "2 - simple" << "3 - intermediate" << "4 - advanced");
     comboSolverLvl->setCurrentIndex(solverLevel - 1);
     controlSolverLvl->addWidget(labelSolverLvl);
     controlSolverLvl->addWidget(comboSolverLvl);
@@ -61,7 +61,7 @@ ControlsWidget::ControlsWidget(QWidget *, size_t width, size_t height, uint8_t s
     spinBoxHeight->setValue(height);
 
     applyButton = new QPushButton;
-    applyButton->setText("Apply");
+    applyButton->setText("Restart");
     allContent->addWidget(applyButton);
 
     setLayout(allContent);

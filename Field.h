@@ -51,15 +51,20 @@ private:
     void shuffle();
 
 #ifdef KY_DEBUG
+
     void print() const;
 
 #endif
 public:
     Field(size_t, size_t, uint8_t _solverLevel);
 
+    explicit Field(const Field *other);
+
     void restart(size_t _width, size_t _height, uint8_t _solverLevel);
 
     void rotate(size_t x, size_t y, bool restartOnFin = true);
+
+    void loadState(const std::vector<std::vector<uint8_t> > &state);
 
     bool check() const;
 
@@ -74,6 +79,8 @@ public:
     size_t getWidth() const { return width; }
 
     size_t getHeight() const { return height; }
+
+    const std::vector<std::vector<uint8_t> > getState() const;
 
     enum Type {
         empty = 0,

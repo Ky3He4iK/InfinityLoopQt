@@ -43,6 +43,7 @@ public slots:
     void resizeSlot(size_t newSize = 0);
 
 signals:
+    void deleteMeSignal();
 
     void redrawSignal();
 };

@@ -61,10 +61,11 @@ void FieldWidget::addCell(size_t x, size_t y) {
 
 void FieldWidget::dataChangedSlot() {
     if (cellsGrid[0].size() != field->getWidth() || cellsGrid.size() != field->getHeight()) {
-        rearrange();
-        resizeSlot();
-    }
-    emit redrawSignal();
+        emit deleteMeSignal();
+//        rearrange();
+//        resizeSlot();
+    } else
+        emit redrawSignal();
 }
 
 void FieldWidget::rearrange() {

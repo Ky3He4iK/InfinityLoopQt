@@ -17,6 +17,9 @@ Field::Field(const size_t _width, const size_t _height, uint8_t _solverLevel) : 
     create(_width, _height);
 }
 
+Field::Field(const Field *other) : width(other->width), height(other->height), field(other->field),
+                                   solverLevel(other->solverLevel) {}
+
 void Field::restart(const size_t _width, const size_t _height, uint8_t _solverLevel) {
     clear();
     if (_solverLevel != 0)
@@ -85,7 +88,7 @@ uint8_t Field::getType(size_t x, size_t y) const {
 }
 
 
- uint8_t Field::getRotation(size_t x, size_t y) const {
+uint8_t Field::getRotation(size_t x, size_t y) const {
     if (x < height && y < width)
         return field[x][y] & ROTATE_MASK;
     return 0;
@@ -197,3 +200,15 @@ void Field::print() const {
 }
 
 #endif
+
+const std::vector<std::vector<uint8_t> > Field::getState() const {
+    return field;
+}
+
+void Field::loadState(const std::vector<std::vector<uint8_t> > &state) {
+    width = state.size();
+    height = state[0].size();
+    field = state;
+
+    emit dataChangedSignal();
+}

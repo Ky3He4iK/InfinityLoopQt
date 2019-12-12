@@ -51,23 +51,22 @@ int main(int argc, char *argv[]) {
         std::cout << "Error: <width> is invalid!\nGiven value: " << qPrintable(width) << '\n';
         return 1;
     }
-    bool ok2;
     QString height = parser.value("height");
-    size_t h = height.toInt(&ok2);
-    if (!ok2) {
+    size_t h = height.toInt(&ok);
+    if (!ok) {
         std::cout << "Error: <height> is invalid!\nGiven value: " << qPrintable(height) << '\n';
         return 1;
     }
     QString size = parser.value("size");
-    size_t s = size.toInt(&ok2);
-    if (!ok2) {
+    size_t s = size.toInt(&ok);
+    if (!ok) {
         std::cout << "Error: <size> is invalid!\nGiven value: " << qPrintable(size) << '\n';
         return 1;
     }
 
     QString solverLvl = parser.value("solver");
-    size_t sl = solverLvl.toInt(&ok2);
-    if (!ok2) {
+    size_t sl = solverLvl.toInt(&ok);
+    if (!ok) {
         std::cout << "Error: <size> is invalid!\nGiven value: " << qPrintable(solverLvl) << '\n';
         return 1;
     }
